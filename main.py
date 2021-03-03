@@ -5,6 +5,7 @@ import tkinter
 from tkinter import filedialog 
 import os
 from multiprocessing import pool
+import math
 
 image_set = []
 
@@ -127,11 +128,15 @@ def ToCIE(in_img_vector):
 
     return [( 116 * var_Y ) - 16, 500 * ( var_X - var_Y ), 200 * ( var_Y - var_Z )] 
 
-def DeltaECIEDistance():
+def DeltaECIEDistance(input_img_1, input_img_2):
     '''
     DOCSTRING: Claculates the Delta E* CIE distance between two CIE-L*ab vectors
     INPUT: input_img_1 and input_img_2, two average RGB vectors of two images
     OUTPUT: The Delta E* CIE distance
     '''
+    img_1 = ToCIE(input_img_1)
+    img_2 = ToCIE(input_img_2)
+
+    return math.sqrt(((img_1[0] - img_2[0]) ** 2 ) + ((img_1[1] - img_2[1]) ** 2) + ((img_1[2] - img_2[2]) ** 2 ))
 
 get_input_image()
