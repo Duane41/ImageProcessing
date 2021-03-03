@@ -18,16 +18,17 @@ def get_input_image():
 
     input_image = filedialog.askopenfilename(initialdir= os.getcwd(), title='Please select an image')
 
-    if ".jpg" not in input_image or ".png" not in input_image or ".jpeg" not in input_image:
+    print(input_image)
+    if ".jpg" not in input_image and ".png" not in input_image and ".jpeg" not in input_image:
         input_image = ""
         return print("Input file does not have the correct extension")
     else:
         input_image = cv2.imread(input_image, 1)
 
         img_vector = np.array(input_image)
-        #divides input image into 20x20 parts, i.e. 400 elements once flattened
 
-        print(img_vector)
+        w,h,d = img_vector.shape
+        #divides input image into 20x20 parts, i.e. 400 elements once flattened
 
         return input_image
 
@@ -68,7 +69,11 @@ def calc_avg_rgb_set():
         img_folder_path = image_set_path + "/" + folder
         print("Processing " + img_folder_path + "...")
         for image in os.listdir(img_folder_path):
+            if ".jpg" not in image and ".png" not in image and ".jpeg" not in image:
+                continue
+
             img_full_path = img_folder_path + "/" + image
+
             image_set.append([calc_avg_rgb(img_full_path), img_full_path])
 
     print("Complete!")
@@ -96,4 +101,37 @@ def display_image(in_img_name = ''):
         cv2.imwrite('output' + datetime.datetime.now().strftime("%d-%b-%Y (%H:%M:%S.%f)") + '.png', img)
         cv2.destroyAllWindows()
 
-calc_avg_rgb_set()
+def ToCIE(in_img_vector):
+    '''
+    DOCSTRING: Converts an image to the CIE image space
+    INPUT: Average RGB vector of an image
+    OUTPUT: CIE representation of the RGB image
+    '''
+    var_X = in_img_vector[0] / 100.0
+    var_Y = in_img_vector[1] / 100.0
+    var_Z = in_img_vector[2] / 100.0
+
+    if ( var_X > 0.008856 ):
+         var_X = var_X ** ( 1/3 )
+    else:
+        var_X = ( 7.787 * var_X ) + ( 16 / 116 )
+
+    if ( var_Y > 0.008856 ):
+        var_Y = var_Y ** ( 1/3 )
+    else:
+        var_Y = ( 7.787 * var_Y ) + ( 16 / 116 )
+    if ( var_Z > 0.008856 ):
+        var_Z = var_Z ** ( 1/3 )
+    else:
+        var_Z = ( 7.787 * var_Z ) + ( 16 / 116 )
+
+    return [( 116 * var_Y ) - 16, 500 * ( var_X - var_Y ), 200 * ( var_Y - var_Z )] 
+
+def DeltaECIEDistance():
+    '''
+    DOCSTRING: Claculates the Delta E* CIE distance between two CIE-L*ab vectors
+    INPUT: input_img_1 and input_img_2, two average RGB vectors of two images
+    OUTPUT: The Delta E* CIE distance
+    '''
+
+get_input_image()
