@@ -17,9 +17,9 @@ def get_input_image():
     '''
     tkinter.Tk().withdraw()
 
-    input_image = filedialog.askopenfilename(initialdir= os.getcwd(), title='Please select an image')
+    #input_image = filedialog.askopenfilename(initialdir= os.getcwd(), title='Please select an image')
+    input_image = "C:/Users/Duane de Villiers/Desktop/Hyperboliq/test_img.jpg"
 
-    print(input_image)
     if ".jpg" not in input_image and ".png" not in input_image and ".jpeg" not in input_image:
         input_image = ""
         return print("Input file does not have the correct extension")
@@ -31,7 +31,29 @@ def get_input_image():
         w,h,d = img_vector.shape
         #divides input image into 20x20 parts, i.e. 400 elements once flattened
 
-        return input_image
+        new_w = math.floor(w / 20)
+        new_h = math.floor(h / 20)
+
+        new_img = np.empty((20, 20, 3))
+
+        for r in range(20):
+            
+            start_r = 0
+            end_r = new_h - 1
+
+            start_c = 0
+            end_c = new_w - 1
+
+            for c in range(20):
+                print(img_vector[start_r:end_r][start_c:end_c])
+                start_r = start_r + new_h
+                end_r = new_h*r - 1
+
+                start_c = start_c + new_w
+                end_c = new_w*c - 1
+
+
+        
 
 def calc_avg_rgb(in_img_name = ''):
     '''
@@ -108,20 +130,23 @@ def ToCIE(in_img_vector):
     INPUT: Average RGB vector of an image
     OUTPUT: CIE representation of the RGB image
     '''
+    print(in_img_vector)
     var_X = in_img_vector[0] / 100.0
     var_Y = in_img_vector[1] / 100.0
     var_Z = in_img_vector[2] / 100.0
 
-    if ( var_X > 0.008856 ):
+    print(var_X)
+    if var_X > 0.008856:
          var_X = var_X ** ( 1/3 )
     else:
         var_X = ( 7.787 * var_X ) + ( 16 / 116 )
 
-    if ( var_Y > 0.008856 ):
+    if var_Y > 0.008856:
         var_Y = var_Y ** ( 1/3 )
     else:
         var_Y = ( 7.787 * var_Y ) + ( 16 / 116 )
-    if ( var_Z > 0.008856 ):
+
+    if var_Z > 0.008856:
         var_Z = var_Z ** ( 1/3 )
     else:
         var_Z = ( 7.787 * var_Z ) + ( 16 / 116 )
@@ -136,6 +161,7 @@ def DeltaECIEDistance(input_img_1, input_img_2):
     '''
     img_1 = ToCIE(input_img_1)
     img_2 = ToCIE(input_img_2)
+
 
     return math.sqrt(((img_1[0] - img_2[0]) ** 2 ) + ((img_1[1] - img_2[1]) ** 2) + ((img_1[2] - img_2[2]) ** 2 ))
 
