@@ -163,17 +163,18 @@ def DeltaECIEDistance(input_img_1, input_img_2):
 
     return math.sqrt(((img_1[0] - img_2[0]) ** 2 ) + ((img_1[1] - img_2[1]) ** 2) + ((img_1[2] - img_2[2]) ** 2 ))
 
-def ReplaceParts():
-    '''
-    DOCSTRING: This function will replace each of the 400 parts in the input image with a image from the image_set that has the shortest Delta E* CIE distance
-    INPUT: n/a
-    OUTPUT: A new 20x20 image with replaced parts
-    '''
-    i = 0
-    for element in input_image:
-        print(list(map(DeltaECIEDistance, (element[i], image_set))))
+# def ReplaceParts():
+#     '''
+#     DOCSTRING: This function will replace each of the 400 parts in the input image with a image from the image_set that has the shortest Delta E* CIE distance
+#     INPUT: n/a
+#     OUTPUT: A new 20x20 image with replaced parts
+#     '''
+#     i = 0
+#     for element in input_image:
+#         print(list(map(DeltaECIEDistance, (element[i], image_set))))
 
 
 calc_avg_rgb_set()
 get_input_image()
-ReplaceParts()
+print(len(image_set))
+# ReplaceParts()
