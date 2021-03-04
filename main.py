@@ -36,7 +36,22 @@ def get_input_image():
         for row in new_img_rows:
             row_split = np.split(row, 20, axis=1)
             for column in row_split:
-                input_image.append(column)
+                input_image.append(calc_avg_rgb_from_array(column))
+
+def calc_avg_rgb_from_array(in_img_name = ''):
+    '''
+    DOCSTRING: Calculates the average RGB vector for a given 3D array
+    INPUT: Image as 3D array
+    OUTPUT: RGB vector
+    '''
+
+    img_vector = np.array(in_img_name)
+    
+    h, w, d = img_vector.shape
+    
+    img_vector.shape = (w*h, d)
+   
+    return tuple(img_vector.mean(axis=0))
 
 def calc_avg_rgb(in_img_name = ''):
     '''
@@ -154,6 +169,11 @@ def ReplaceParts():
     INPUT: n/a
     OUTPUT: A new 20x20 image with replaced parts
     '''
+    i = 0
+    for element in input_image:
+        print(list(map(DeltaECIEDistance, (element[i], image_set))))
 
+
+calc_avg_rgb_set()
 get_input_image()
-
+ReplaceParts()
