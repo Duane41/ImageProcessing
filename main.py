@@ -31,28 +31,32 @@ def get_input_image():
         w,h,d = img_vector.shape
         #divides input image into 20x20 parts, i.e. 400 elements once flattened
 
-        new_w = math.floor(w / 20)
-        new_h = math.floor(h / 20)
+        new_w = math.floor(h / 20)
+        new_h = math.floor(w / 20)
 
-        new_img = np.empty((20, 20, 3))
+        new_img = np.empty((20, 20, new_w, new_h))
 
-        for r in range(20):
-            
-            start_r = 0
-            end_r = new_h - 1
+        start_r = 0
+        end_r = new_h - 1
+        start_c = 0
+        end_c = new_w - 1
 
+        for r in range(1, 21):
+            for c in range(1, 21):
+                #img_vector[start_r:end_r][start_c:end_c]
+
+                start_c = start_c + new_w
+                end_c = new_w*(c+1) - 1
+                print(start_c)
+                print(end_c)
+                print("-----------")
+
+                
             start_c = 0
             end_c = new_w - 1
 
-            for c in range(20):
-                print(img_vector[start_r:end_r][start_c:end_c])
-                start_r = start_r + new_h
-                end_r = new_h*r - 1
-
-                start_c = start_c + new_w
-                end_c = new_w*c - 1
-
-
+            start_r = start_r + new_h
+            end_r = new_h*(r+1) - 1
         
 
 def calc_avg_rgb(in_img_name = ''):
