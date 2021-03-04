@@ -32,33 +32,6 @@ def get_input_image():
 
         img_vector = np.array(img)
 
-        
-        #divides input image into 20x20 parts, i.e. 400 elements once flattened
-
-        #h, w, d = img_vector.shape
-        # new_w = math.floor(w / 20)
-        # new_h = math.floor(h / 20)
-
-        # new_img = np.empty((20, 20, new_w, new_h))
-
-        # start_r = 0
-        # end_r = new_h - 1
-        # start_c = 0
-        # end_c = new_w - 1
-
-        # for r in range(1, 21):
-        #     for c in range(1, 21):
-        #         print(img_vector[start_r:end_r][start_c:end_c].shape)
-
-        #         start_c = start_c + new_w
-        #         end_c = new_w*(c+1) - 1
-                
-        #     start_c = 0
-        #     end_c = new_w - 1
-
-        #     start_r = start_r + new_h
-        #     end_r = new_h*(r+1) - 1
-
         new_img_rows = np.split(img_vector, 20)
         for row in new_img_rows:
             row_split = np.split(row, 20, axis=1)
@@ -181,6 +154,6 @@ def ReplaceParts():
     INPUT: n/a
     OUTPUT: A new 20x20 image with replaced parts
     '''
-    
+
 get_input_image()
 
