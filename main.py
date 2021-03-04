@@ -128,12 +128,10 @@ def ToCIE(in_img_vector):
     INPUT: Average RGB vector of an image
     OUTPUT: CIE representation of the RGB image
     '''
-    print(in_img_vector)
     var_X = in_img_vector[0] / 100.0
     var_Y = in_img_vector[1] / 100.0
     var_Z = in_img_vector[2] / 100.0
 
-    print(var_X)
     if var_X > 0.008856:
          var_X = var_X ** ( 1/3 )
     else:
@@ -163,18 +161,20 @@ def DeltaECIEDistance(input_img_1, input_img_2):
 
     return math.sqrt(((img_1[0] - img_2[0]) ** 2 ) + ((img_1[1] - img_2[1]) ** 2) + ((img_1[2] - img_2[2]) ** 2 ))
 
-# def ReplaceParts():
-#     '''
-#     DOCSTRING: This function will replace each of the 400 parts in the input image with a image from the image_set that has the shortest Delta E* CIE distance
-#     INPUT: n/a
-#     OUTPUT: A new 20x20 image with replaced parts
-#     '''
-#     i = 0
-#     for element in input_image:
-#         print(list(map(DeltaECIEDistance, (element[i], image_set))))
-
+def ReplaceParts():
+    '''
+    DOCSTRING: This function will replace each of the 400 parts in the input image with a image from the image_set that has the shortest Delta E* CIE distance
+    INPUT: n/a
+    OUTPUT: A new 20x20 image with replaced parts
+    '''
+    i = 0
+    new_image = []
+    for element in input_image:
+        elemnet_options = []
+        for image in image_set:
+            elemnet_options.append([DeltaECIEDistance(calc_avg_rgb_from_array(element[i]), image), image])
+        new_image.append(min(elemnet_options))
 
 calc_avg_rgb_set()
 get_input_image()
-print(len(image_set))
-# ReplaceParts()
+ReplaceParts()
