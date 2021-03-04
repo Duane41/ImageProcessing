@@ -8,56 +8,62 @@ from multiprocessing import pool
 import math
 
 image_set = []
-
+input_image = []
+input_image_path = ""
 def get_input_image():
     '''
     DOCSTRING: Gets the input image and divides it into 400 20x20 parts
     INPUT: Image name
     OUTPUT: RGB vector
     '''
+    global input_image
+    global input_image_path
+
     tkinter.Tk().withdraw()
 
     #input_image = filedialog.askopenfilename(initialdir= os.getcwd(), title='Please select an image')
-    input_image = "C:/Users/Duane de Villiers/Desktop/Hyperboliq/test_img.jpg"
+    input_image_path = "C:/Users/Duane de Villiers/Desktop/Hyperboliq/test_img.jpg"
 
-    if ".jpg" not in input_image and ".png" not in input_image and ".jpeg" not in input_image:
-        input_image = ""
+    if ".jpg" not in input_image_path and ".png" not in input_image_path and ".jpeg" not in input_image_path:
+        input_image_path = ""
         return print("Input file does not have the correct extension")
     else:
-        input_image = cv2.imread(input_image, 1)
+        img = cv2.imread(input_image_path, 1)
 
-        img_vector = np.array(input_image)
+        img_vector = np.array(img)
 
-        w,h,d = img_vector.shape
+        
         #divides input image into 20x20 parts, i.e. 400 elements once flattened
 
-        new_w = math.floor(h / 20)
-        new_h = math.floor(w / 20)
+        #h, w, d = img_vector.shape
+        # new_w = math.floor(w / 20)
+        # new_h = math.floor(h / 20)
 
-        new_img = np.empty((20, 20, new_w, new_h))
+        # new_img = np.empty((20, 20, new_w, new_h))
 
-        start_r = 0
-        end_r = new_h - 1
-        start_c = 0
-        end_c = new_w - 1
+        # start_r = 0
+        # end_r = new_h - 1
+        # start_c = 0
+        # end_c = new_w - 1
 
-        for r in range(1, 21):
-            for c in range(1, 21):
-                #img_vector[start_r:end_r][start_c:end_c]
+        # for r in range(1, 21):
+        #     for c in range(1, 21):
+        #         print(img_vector[start_r:end_r][start_c:end_c].shape)
 
-                start_c = start_c + new_w
-                end_c = new_w*(c+1) - 1
-                print(start_c)
-                print(end_c)
-                print("-----------")
-
+        #         start_c = start_c + new_w
+        #         end_c = new_w*(c+1) - 1
                 
-            start_c = 0
-            end_c = new_w - 1
+        #     start_c = 0
+        #     end_c = new_w - 1
 
-            start_r = start_r + new_h
-            end_r = new_h*(r+1) - 1
-        
+        #     start_r = start_r + new_h
+        #     end_r = new_h*(r+1) - 1
+
+        new_img_rows = np.split(img_vector, 20)
+        for row in new_img_rows:
+            row_split = np.split(row, 20, axis=1)
+            for column in row_split:
+                input_image.append(column)
 
 def calc_avg_rgb(in_img_name = ''):
     '''
@@ -73,7 +79,7 @@ def calc_avg_rgb(in_img_name = ''):
 
     img_vector = np.array(img)
     
-    w,h,d = img_vector.shape
+    h, w, d = img_vector.shape
     
     img_vector.shape = (w*h, d)
    
@@ -169,4 +175,12 @@ def DeltaECIEDistance(input_img_1, input_img_2):
 
     return math.sqrt(((img_1[0] - img_2[0]) ** 2 ) + ((img_1[1] - img_2[1]) ** 2) + ((img_1[2] - img_2[2]) ** 2 ))
 
+def ReplaceParts():
+    '''
+    DOCSTRING: This function will replace each of the 400 parts in the input image with a image from the image_set that has the shortest Delta E* CIE distance
+    INPUT: n/a
+    OUTPUT: A new 20x20 image with replaced parts
+    '''
+    
 get_input_image()
+
