@@ -21,7 +21,7 @@ def get_input_image():
 
     tkinter.Tk().withdraw()
 
-    input_image = filedialog.askopenfilename(initialdir= os.getcwd(), title='Please select an image')
+    input_image_path = filedialog.askopenfilename(initialdir= os.getcwd(), title='Please select an image')
     #input_image_path = "C:/Users/Duane de Villiers/Desktop/Hyperboliq/test_img.jpg"
 
     if ".jpg" not in input_image_path and ".png" not in input_image_path and ".jpeg" not in input_image_path:
@@ -194,6 +194,7 @@ def ReplacePartsAndDisplay():
     cv2.imshow("Final Image", vert)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
+    cv2.imwrite("FinalImage.jpg", vert) 
 
 calc_avg_rgb_set()
 get_input_image()
