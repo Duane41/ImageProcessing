@@ -167,13 +167,16 @@ def ReplaceParts():
     INPUT: n/a
     OUTPUT: A new 20x20 image with replaced parts
     '''
-    i = 0
+    print("Replacing image parts...")
     new_image = []
     for element in input_image:
-        elemnet_options = []
+        element_options = []
         for image in image_set:
-            elemnet_options.append([DeltaECIEDistance(calc_avg_rgb_from_array(element[i]), image), image])
-        new_image.append(min(elemnet_options))
+            element_options.append([DeltaECIEDistance(element, image[0]), image])
+        if len(element_options) > 0:
+            new_image.append(min(element_options))
+    print(len(new_image))
+    
 
 calc_avg_rgb_set()
 get_input_image()
