@@ -21,8 +21,8 @@ def get_input_image():
 
     tkinter.Tk().withdraw()
 
-    #input_image = filedialog.askopenfilename(initialdir= os.getcwd(), title='Please select an image')
-    input_image_path = "C:/Users/Duane de Villiers/Desktop/Hyperboliq/test_img.jpg"
+    input_image = filedialog.askopenfilename(initialdir= os.getcwd(), title='Please select an image')
+    #input_image_path = "C:/Users/Duane de Villiers/Desktop/Hyperboliq/test_img.jpg"
 
     if ".jpg" not in input_image_path and ".png" not in input_image_path and ".jpeg" not in input_image_path:
         input_image_path = ""
@@ -161,7 +161,7 @@ def DeltaECIEDistance(input_img_1, input_img_2):
 
     return math.sqrt(((img_1[0] - img_2[0]) ** 2 ) + ((img_1[1] - img_2[1]) ** 2) + ((img_1[2] - img_2[2]) ** 2 ))
 
-def ReplaceParts():
+def ReplacePartsAndDisplay():
     '''
     DOCSTRING: This function will replace each of the 400 parts in the input image with a image from the image_set that has the shortest Delta E* CIE distance
     INPUT: n/a
@@ -175,9 +175,26 @@ def ReplaceParts():
             element_options.append([DeltaECIEDistance(element, image[0]), image])
         if len(element_options) > 0:
             new_image.append(min(element_options))
-    print(len(new_image))
+    print("Part replacement complete!")
+
+    i = 0
+    new_image_images = []
+    for r in range(20):
+
+        for c in range(20):
+            new_image_images.append(cv2.resize(cv2.imread(image_set[i][1]), (40,40)))
+            i = i + 1
     
+    hor = []
+    for k in range(0, 400, 20):
+        hor.append(np.hstack(new_image_images[k:k + 19]))
+
+    vert = np.vstack(hor)
+
+    cv2.imshow("Final Image", vert)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
 
 calc_avg_rgb_set()
 get_input_image()
-ReplaceParts()
+ReplacePartsAndDisplay()
